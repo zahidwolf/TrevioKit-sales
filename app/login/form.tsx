@@ -1,0 +1,6 @@
+'use client';
+import { useState } from 'react';
+export default function Login() {
+  const [error, setError] = useState(''); const [busy, setBusy] = useState(false);
+  return <main className="login"><div className="brand">TrevioKit<span>OWNER WORKSPACE</span></div><h1>Welcome back.</h1><p>Sign in to manage your stock and retailer transactions.</p><form onSubmit={async event => { event.preventDefault(); setBusy(true); setError(''); const form = new FormData(event.currentTarget); try { const response = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(form)) }); const data = await response.json(); if (!response.ok) throw new Error(data.error); location.href = '/'; } catch (e) { setError((e as Error).message); setBusy(false); } }}><label>Username<input name="username" autoComplete="username" required maxLength={160}/></label><label>Password<input name="password" type="password" autoComplete="current-password" required maxLength={256}/></label><button disabled={busy}>{busy ? 'Signing in…' : 'Sign in →'}</button>{error && <p role="alert" className="error">{error}</p>}</form><small>Private access · One owner account</small></main>;
+}
